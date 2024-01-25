@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:country_ip/country_ip.dart';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:newsapp/models/newsModel.dart';
@@ -11,33 +12,37 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsHomePage extends StatelessWidget {
-  const NewsHomePage({Key? key});
+   NewsHomePage({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Home")),
-      body: FutureBuilder<bool>(
-        future: checkConnectivity(context),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            bool isOnline = snapshot.data ?? false;
-            String query = "World", from = "", sortBy = "publishedAt";
 
-            if (isOnline) {
-              return LoadNews.withPram(query, sortBy, getTodayDate());
+    return Scaffold(
+      // appBar: AppBar(title: Text("Home")),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FutureBuilder<bool>(
+          future: checkConnectivity(context),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
             } else {
-              // Show offline UI here
-              return Center(
-                child: OfflineNews(),
-              );
+              bool isOnline = snapshot.data ?? false;
+              String query = "World", from = "", sortBy = "publishedAt";
+
+              if (isOnline) {
+                return LoadNews.withPram(query, sortBy, getTodayDate());
+              } else {
+                // Show offline UI here
+                return Center(
+                  child: OfflineNews(),
+                );
+              }
             }
-          }
-        },
+          },
+        ),
       ),
     );
   }

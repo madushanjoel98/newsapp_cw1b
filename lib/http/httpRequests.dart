@@ -7,12 +7,15 @@ import 'dart:developer' as dev;
 import 'package:newsapp/models/newsModel.dart';
 
 
-final String? apiKey = "ae75c2bc6b604a93af4e8fbd7f5d8c18";
+//final String? apiKey = "ae75c2bc6b604a93af4e8fbd7f5d8c18";
+ String? apiKey ="5725171cf62e4093aec183723cc77a82";
+
+
 
 Future<NewsModel?> fetchData(String? query, String? from, String sortBy) async {
   try {
     final url = Uri.parse(
-        'https://newsapi.org/v2/everything?q=$query&from=$from&sortBy=$sortBy&apiKey=$apiKey');
+        'https://newsapi.org/v2/everything?q=$query&from=$from&sortBy=$sortBy&apiKey=$apiKey&language=en');
     print(url);
     dev.log(url.toString());
     final response = await http.get(url);

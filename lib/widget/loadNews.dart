@@ -1,16 +1,16 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:newsapp/models/newsModel.dart';
 import 'package:newsapp/provider/NewsProvider.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class LoadNews extends StatefulWidget {
   LoadNews({Key? key});
   String? query;
   String? sortby;
   String? date;
-  bool? isSearch;
+  bool? isSearch = false;
 
   LoadNews.withPram(this.query, this.sortby, this.date);
   LoadNews.forSearch(this.query, this.sortby, this.date, this.isSearch);
@@ -28,64 +28,90 @@ class _LoadNewsState extends State<LoadNews> {
           future: news.fetchData(widget.query!, widget.date, widget.sortby!),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
+              return Center(
+                child: Text(
+                  'Error: ${snapshot.error}',
+                  style: TextStyle(color: Colors.red),
+                ),
+              );
             } else if (snapshot.hasData) {
-              // Use the NewsModel data to build your UI
-              // Example: return Text(snapshot.data.status);
               return ListView.builder(
                 itemCount: snapshot.data?.articles.length,
                 itemBuilder: (context, int index) {
                   var article = snapshot.data?.articles.elementAt(index);
-                  return Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        news.launchURL(article!.url);
-                      },
-                      child: Container(
-                        color: Colors.amberAccent,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child: widget.isSearch != null && !widget.isSearch!
-                                      ? CachedNetworkImage(
-                                    imageUrl: article?.urlToImage ??
-                                        "https://thumbs.dreamstime.com/b/newspaper-line-news-icon-press-article-paper-journal-212522658.jpg",
-                                    placeholder: (context, url) =>
-                                        CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        Image.asset('assets/newsimage.png'),
-                                  )
-                                      : Container(),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      article?.title ?? "",
-                                      style: TextStyle(fontWeight: FontWeight.w600),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                  return GestureDetector(
+                    onLongPress: () {
+                      Share.share(article!.title! + " " + article!.url!, subject: 'News');
+                    },
+                    onTap: () {
+                      news.launchURL(article!.url);
+                    },
+                    child: Card(
+                      margin: EdgeInsets.all(8.0),
+                      elevation: 4.0,
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(12.0),
+                              topRight: Radius.circular(12.0),
                             ),
-                          ],
-                        ),
+                            child: CachedNetworkImage(
+                              imageUrl: article?.urlToImage ??
+                                  "https://thumbs.dreamstime.com/b/newspaper-line-news-icon-press-article-paper-journal-212522658.jpg",
+                              placeholder: (context, url) => Container(
+                                height: 200.0,
+                                child: Center(child: CircularProgressIndicator()),
+                              ),
+                              errorWidget: (context, url, error) => Image.asset(
+                                'assets/newsimage.png',
+                                height: 200.0,
+                                fit: BoxFit.cover,
+                              ),
+                              fit: BoxFit.cover,
+                              height: 200.0,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text(
+                              article?.title ?? "",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text(
+                              article?.description ?? "",
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   );
                 },
               );
             } else {
-              return Text('No data available.');
+              return Center(
+                child: Text('No data available.'),
+              );
             }
           },
         );
