@@ -53,7 +53,7 @@ class _LoadNewsState extends State<LoadNews> {
                     child: Card(
                       margin: EdgeInsets.all(8.0),
                       elevation: 4.0,
-                      color: Colors.white,
+                      color:  Color(0xfffff0e5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
@@ -69,7 +69,7 @@ class _LoadNewsState extends State<LoadNews> {
                               imageUrl: article?.urlToImage ??
                                   "https://thumbs.dreamstime.com/b/newspaper-line-news-icon-press-article-paper-journal-212522658.jpg",
                               placeholder: (context, url) => Container(
-                                height: 200.0,
+                                height: MediaQuery.sizeOf(context).height,
                                 child: Center(child: CircularProgressIndicator()),
                               ),
                               errorWidget: (context, url, error) => Image.asset(

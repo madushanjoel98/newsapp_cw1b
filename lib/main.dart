@@ -7,8 +7,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    /// Providers are above [MyApp] instead of inside it, so that tests
-    /// can use [MyApp] while mocking the providers
+
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => NewsProvider()),
@@ -24,7 +23,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       color: Color(0xffff1489),
       title: 'News',
-      theme: ThemeData.fallback(),
+      theme: ThemeData.light(useMaterial3: true),
+      darkTheme: ThemeData.dark(),
       home: MyHomePage(),
       debugShowCheckedModeBanner: false,
     );

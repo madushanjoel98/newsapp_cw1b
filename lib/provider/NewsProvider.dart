@@ -17,21 +17,12 @@ import 'package:url_launcher/url_launcher.dart';
 class NewsProvider with ChangeNotifier {
   //final String? apiKey = "ae75c2bc6b604a93af4e8fbd7f5d8c18";
 //final String? apiKey = "ae75c2bc6b604a93af4e8fbd7f5d8c18";
-  String? apiKey ="5725171cf62e4093aec183723cc77a82";
-  String? apiKey2 ="ae75c2bc6b604a93af4e8fbd7f5d8c18";
-   int count_calls=0;
+  String? apiKey = "5725171cf62e4093aec183723cc77a82";
+  String? apiKey2 = "ae75c2bc6b604a93af4e8fbd7f5d8c18";
+  int count_calls = 0;
+
   Future<NewsModel?> fetchData(
       String? query, String? from, String sortBy) async {
-//Blancing API keys
-    if(count_calls==50){
-      print("Using API key 2");
-      apiKey=apiKey2;
-    }else
-    if(count_calls>100){
-      print("Reset API key");
-      apiKey="5725171cf62e4093aec183723cc77a82";
-      count_calls=0;
-    }
     try {
       final url = Uri.parse(
           'https://newsapi.org/v2/everything?q=$query&from=$from&sortBy=$sortBy&apiKey=$apiKey');
@@ -40,11 +31,9 @@ class NewsProvider with ChangeNotifier {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        count_calls++;
-        print(count_calls);
         // Successful response
-       // print('Response data: ${response.body}');
-        saveJson(response.body);
+        // print('Response data: ${response.body}');
+        saveJson(response.body); //Save response
         return parseNewsModel(response.body);
       } else {
         // Error handling
@@ -86,40 +75,10 @@ class NewsProvider with ChangeNotifier {
       throw Exception('Could not launch $url');
     }
   }
-  Future<NewsModel?> offlines(){
+
+  Future<NewsModel?> offlines() {
     return getSavedJsonJSON();
   }
-  Future<List<CatgoryItemModel>> getCatlist() async {
-    // Simulating an asynchronous operation, such as fetching data from a server.
-    await Future.delayed(Duration(seconds: 2));
-    final countryIpResponse = await CountryIp.find();
-
-    // Initialize an empty list
-    List<CatgoryItemModel> catgoryList = [];
-
-    // Adding news categories to the list
-    if(countryIpResponse!=null){
-      catgoryList.add(CatgoryItemModel(countryIpResponse!.country??"World", Colors.blue, "🌍"));
-    }
-
-    catgoryList.add(CatgoryItemModel("Sport", Colors.amber, "⚽️"));
-    catgoryList.add(CatgoryItemModel("Politics", Colors.deepPurple, "🗳️"));
-    catgoryList.add(CatgoryItemModel("Technology", Colors.green, "🔧"));
-    catgoryList.add(CatgoryItemModel("Entertainment", Colors.greenAccent, "🍿"));
-    catgoryList.add(CatgoryItemModel("Fitness", Colors.brown, "💪"));
-    catgoryList.add(CatgoryItemModel("Movie", Colors.red, "🎬"));
-    catgoryList.add(CatgoryItemModel("Beauty", Colors.indigoAccent, "💄"));
-    catgoryList.add(CatgoryItemModel("Aliens", Colors.grey, "👽"));
-    catgoryList.add(CatgoryItemModel("Space", Colors.lightGreen, "🚀"));
-    catgoryList.add(CatgoryItemModel("Photography", Colors.deepPurple, "📷"));
-    catgoryList.add(CatgoryItemModel("Social", Colors.amber, "🤓"));
-    catgoryList.add(CatgoryItemModel("Superhero", Colors.red, "🦸‍♂️"));
-
-    // Return the list of categories.
-    return catgoryList;
-  }
-
-
 }
 
 String getTodayDate() {
