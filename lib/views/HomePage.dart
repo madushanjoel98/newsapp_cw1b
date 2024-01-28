@@ -2,13 +2,10 @@ import 'dart:io';
 
 import 'package:country_ip/country_ip.dart';
 import 'package:flutter/material.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:newsapp/models/newsModel.dart';
 import 'package:newsapp/provider/NewsProvider.dart';
 import 'package:newsapp/views/webview.dart';
 import 'package:newsapp/widget/loadNews.dart';
 import 'package:newsapp/widget/offlinenewsLoader.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsHomePage extends StatelessWidget {

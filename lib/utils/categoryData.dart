@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 
 
 Future<List<CatgoryItemModel>> getCatlist() async {
-  // Simulating an asynchronous operation, such as fetching data from a server.
+
   await Future.delayed(Duration(seconds: 2));
-  final countryIpResponse = await CountryIp.find();
+
 
   // Initialize an empty list
   List<CatgoryItemModel> catgoryList = [];
-
-  // Adding news categories to the list
+  final countryIpResponse = await CountryIp.find();//get country by IP
   if(countryIpResponse!=null){
-    catgoryList.add(CatgoryItemModel(countryIpResponse!.country??"World", Colors.blue, "🌍"));
+    catgoryList.add(CatgoryItemModel(countryIpResponse!.country??"World",
+        Colors.blue, "🌍"));
   }
-
+  // Adding news categories to the list
   catgoryList.add(CatgoryItemModel("Sport", Colors.amber, "⚽️"));
   catgoryList.add(CatgoryItemModel("Politics", Colors.deepPurple, "🗳️"));
   catgoryList.add(CatgoryItemModel("Technology", Colors.green, "🔧"));

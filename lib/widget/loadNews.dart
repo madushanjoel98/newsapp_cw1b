@@ -7,12 +7,14 @@ import 'package:share_plus/share_plus.dart';
 
 class LoadNews extends StatefulWidget {
   LoadNews({Key? key});
+
   String? query;
   String? sortby;
   String? date;
   bool? isSearch = false;
 
   LoadNews.withPram(this.query, this.sortby, this.date);
+
   LoadNews.forSearch(this.query, this.sortby, this.date, this.isSearch);
 
   @override
@@ -45,7 +47,8 @@ class _LoadNewsState extends State<LoadNews> {
                   var article = snapshot.data?.articles.elementAt(index);
                   return GestureDetector(
                     onLongPress: () {
-                      Share.share(article!.title! + " " + article!.url!, subject: 'News');
+                      Share.share(article!.title! + " " + article!.url!,
+                          subject: 'News');
                     },
                     onTap: () {
                       news.launchURL(article!.url);
@@ -53,7 +56,7 @@ class _LoadNewsState extends State<LoadNews> {
                     child: Card(
                       margin: EdgeInsets.all(8.0),
                       elevation: 4.0,
-                      color:  Color(0xfffff0e5),
+                      color: Color(0xfffff0e5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
@@ -70,7 +73,8 @@ class _LoadNewsState extends State<LoadNews> {
                                   "https://thumbs.dreamstime.com/b/newspaper-line-news-icon-press-article-paper-journal-212522658.jpg",
                               placeholder: (context, url) => Container(
                                 height: MediaQuery.sizeOf(context).height,
-                                child: Center(child: CircularProgressIndicator()),
+                                child:
+                                    Center(child: CircularProgressIndicator()),
                               ),
                               errorWidget: (context, url, error) => Image.asset(
                                 'assets/newsimage.png',
